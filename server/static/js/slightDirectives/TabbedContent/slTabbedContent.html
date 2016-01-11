@@ -1,0 +1,27 @@
+<div class="flexcontainer">
+    <nav class="horizontal" role="navigation">
+        <ul>
+            <li class="spacer">&nbsp;</li>
+            <li
+                ng-repeat="pane in panes"
+                ng-class="{'active': pane.active}"
+                ng-click="switchToPane(pane)"
+                title="{{pane.title}}"
+            >
+            {{pane.title}}
+            </li>
+            <li class="spacer">&nbsp;</li>
+        </ul>
+    </nav>
+    <!-- only for a nice visual:  -->
+    <div class="border-corners">
+        <div></div>
+        <div></div>
+    </div>
+    <!-- end visual -->
+    <div
+        class="tabbed-content"
+        ng-transclude=""
+    >
+    </div>
+</div>

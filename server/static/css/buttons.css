@@ -1,0 +1,66 @@
+@charset "utf-8";
+
+/******************************************/
+/**  buttons                             **/
+/******************************************/
+
+button, .button {
+	cursor:					pointer;
+}
+
+.button:not(tr), a.button:link {
+	display:				block;
+	width:					10em;
+	padding:				0.5em;
+	margin:					0.5em auto;
+
+	border:					none 0 black;
+	border-radius:			1em;
+	background-color:		rgb(0, 0, 0);
+	background-color:		rgba(0, 0, 0, 0.4);
+	box-shadow:				0 0 10px rgba(0,0,0,0.2);
+
+	color:					inherit;
+	font-size:				inherit;
+	line-height:			inherit;
+	font-family:			inherit;
+	text-align:				center;
+	text-shadow:			inherit;
+}
+
+.sunlight .button {
+	background-color:		rgb(0, 0, 0);
+	background-color:		rgba(0, 0, 0, 0.1);
+}
+
+.button.small {
+	width:					auto;
+	padding:				0.1em 0.3em;
+	margin:					0.1em auto;
+}
+
+.button.leftalign {
+	display:				inline-block;
+	/*float:					right;*/
+	width:					auto;
+	padding:				0.1em 0.5em;
+	/*margin:					0.1em;*/
+}
+
+.button.inline {
+	display:				inline-block;
+}
+
+.button.textonly {
+	display:				inline;
+	background-color:		transparent;
+	box-shadow:				none;
+	/*width:					auto;*/
+	padding:				0.1em 0.5em;
+	/*margin:					0.1em auto;*/
+}
+
+/*.button:not(.textonly):hover, .button.small:hover,  a.button:link:hover {*/
+.button:not(.textonly):hover {
+	box-shadow:				0 0 15px rgba(255, 200, 0, 0.6);
+}

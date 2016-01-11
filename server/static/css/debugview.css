@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+/******************************************/
+/**  DebugView                           **/
+/******************************************/
+
+div.debugView {
+	display:block;
+
+	/*flex box item (of app)*/
+	/* for safari: */
+	-webkit-order:					0;
+	-webkit-flex: 					0 1 auto;
+	-webkit-align-self: 			auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+
+	/*position:absolute;
+	top:0;
+
+	float:left;
+	clear:both;*/
+
+	margin: 0;
+	padding: 1em;
+
+	/*height:24em;*/
+	/*height:30em;*/
+	/*max-height: 93%;*/
+	/*max-width: 30%;*/
+	max-width: 20em;
+	/*max-width: 12rem;*/
+
+	overflow-x: hidden;
+	overflow-y: auto;
+
+	font-size: 1em;
+    line-height: 110%;
+	text-align: left;
+}
+
+div.debugView section {
+	margin: 0.5em 0 0 0;
+	padding: 0 0 0 0.5em;
+}
+
+div.debugView section label:first-child {
+	position: relative;
+	left: -0.5em;
+	padding: 0;
+}
+
+.debugView pre {
+	padding: 0;
+	margin: 0;
+
+	margin-right: 1em;
+	overflow:visible;
+
+	font-size: 0.8em;
+	line-height: 100%;
+}
+
+/* hide debugView on small screens*/
+/*@media screen and (max-width: 1300px) {
+	div.debugView {
+		display:none;
+    }
+}*/

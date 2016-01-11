@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html ng-app="mainApp" ng-strict-di>
+<head>
+    <title>OLA+Cherrypy Example</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="img/logo/logo.ico" />
+	<link rel="shortcut icon" type="image/png" href="img/logo/logo_500x500.png" />
+	<link rel="shortcut icon" type="image/svg" href="img/logo/logo.svg" />
+
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/app.css">
+    <link rel="stylesheet" type="text/css" href="css/debugview.css">
+    <link rel="stylesheet" type="text/css" href="css/buttons.css">
+
+    <script type="text/javascript" charset="UTF-8" src="js/polyfill.js"></script>
+
+    <script type="text/javascript" charset="UTF-8" src="js/angular.js"></script>
+    <!--<script type="text/javascript" charset="UTF-8" src="js/angular-resource.js"></script>-->
+    <!--<script type="text/javascript" charset="UTF-8" src="js/angular-route.js"></script>-->
+
+    <script type="text/javascript" charset="UTF-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/controllers.js"></script>
+    <script type="text/javascript" charset="UTF-8" src="js/myFilters.js"></script>
+    <!--<script type="text/javascript" charset="UTF-8" src="js/slightDirectives/myDirectivesTextFileButton.js"></script>-->
+
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/slInputMods.js"
+    ></script>
+
+
+    <script type="text/javascript" charset="UTF-8"
+        src="js/slightDirectives/TabbedContent/slTabbedContent.js"
+    ></script>
+    <link rel="stylesheet" type="text/css"
+        href="js/slightDirectives/TabbedContent/slTabbedContent.css"
+    >
+
+
+    <!-- mobile specific -->
+    <meta
+        name="viewport"
+        content="
+            width=device-width,
+            initial-scale=1.0,
+            minimum-scale=1.0,
+            maximum-scale=1.0,
+            user-scalable=no
+        "
+     />
+
+	<!-- **********
+		IPAD specific metas:
+		https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+	-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="format-detection" content="telephone=no">
+	<!-- ********** -->
+</head>
+<body
+    class="blueocean"
+    ng-class="viewStyle.list[data.settings.viewStyle].class"
+    ng-controller="MainController"
+>
+    <div id="MainController" class="app" >
+        <sl-tabbed-content
+            initial-pane="channel"
+        >
+            <sl-pane title="debug" class="debugView">
+                    <div>
+                    <label>style:</label>
+                    <select
+                        ng-model="data.settings.viewStyle"
+                        title="switch style"
+                        ng-options="
+                            vStyleName as vStyle.name for (
+                                vStyleName,
+                                vStyle
+                            ) in viewStyle.list
+                        "
+                    >
+                        <option value="">-- choose style --</option>
+                    </select>
+                    <br>
+                    <button
+                        class="button small inline"
+                        title="test something"
+                        ng-click="testThing()"
+                    >
+                        test thing
+                    </button>
+                    <br>
+
+                </div>
+                <!--******************************************-->
+                <div  class="toggle">
+                    <h3 class="caption">internals:</h3>
+        			<pre class="text_small">*************************</pre>
+        			<pre class="text_small">channel_id: {{channel_id}}</pre>
+        			<pre class="text_small">data: {{data}}</pre>
+        			<pre class="text_small">*************************</pre>
+                </div>
+    		</sl-pane><!-- debugView end -->
+
+            <sl-pane title="channel">
+                <section class="colorSlidersSection">
+                    <label class="">
+                        <span class="label">channel id</span>
+                        <input
+                            type="number"
+                            inputmode="numeric"
+                            title="value"
+                            min="1"
+                            max="512"
+                            step="1"
+                            ng-model="data.channel_id"
+                            ng-model-options="{
+                                updateOn: 'default blur',
+                                debounce: {'default': 500, 'blur': 0}
+                            }"
+                        >
+                    </label>
+                    <div class="colorSlidersGroup">
+                        <label class="colorGroup">
+                            <span class="label">value</span>
+                            <input
+                                type="number"
+                                inputmode="numeric"
+                                title="value"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="data.channels[data.channel_id-1]"
+                                ng-model-options="{
+                                    updateOn: 'default blur',
+                                    debounce: {'default': 500, 'blur': 0}
+                                }"
+                            >
+                            <input
+                                type="range"
+                                class="vertical"
+                                orient="vertical"
+                                title="value"
+                                min="0"
+                                max="255"
+                                step="1"
+                                ng-model="data.channels[data.channel_id-1]"
+                            >
+                        </label>
+                    </div>
+                    <button
+                        class="button small inline"
+                        title="test something"
+                        ng-click="channel_set()"
+                    >
+                        channel set
+                    </button>
+                </section>
+            </sl-pane><!-- channel end -->
+
+            <sl-pane title="channel_overview">
+                <div
+                    style="max-width:90em"
+                >
+                    data.channels: {{data.channels}}
+                </div>
+                <!-- <div
+                    ng-repeat="(index, item) in data.channels"
+                >
+                    <span>{{index}}</span><br>
+                    <span>{{item}}</span>
+                </div> -->
+
+
+                <button
+                    class="button small inline"
+                    title="get all channels"
+                    ng-click="channels_get()"
+                >
+                    set to all selected
+                </button>
+            </sl-pane><!-- channel_overview end -->
+        </sl-tabbed-content>
+
+        <!-- <div
+            sl-shape-pusher
+            items="data.shapepusher_items"
+            settings="data.shapepusher_settings"
+            item-active="itemActive"
+            items-selected="itemsSelected"
+        >
+        </div>
+        <div
+            sl-shape-pusher-controls
+            settings="data.shapepusher_settings"
+            show-buttons="showButtons"
+        >
+        </div> -->
+
+
+    </div>
+</body>
+</html>

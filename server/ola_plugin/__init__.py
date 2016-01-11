@@ -80,7 +80,7 @@ class OLAPlugin(plugins.SimplePlugin):
             if channel_id.isdigit():
                 # if int(channel_id) < 512:
                 # if (0 < int(channel_id)) & (int(channel_id) < 512):
-                if 0 < int(channel_id) < 512:
+                if 0 <= int(channel_id) < 512:
                     # print("int(channel_id): {}".format(int(channel_id)))
                     channel_value = self.channels[int(channel_id)]
                     return channel_value
@@ -92,23 +92,27 @@ class OLAPlugin(plugins.SimplePlugin):
 
     def handle_channel_set(self, channel_id=None, channel_value=None):
         """handle channel set bus request."""
-        print("handle_channel_set:")
-        print("\tchannel_id:{}".format(channel_id))
-        print("\tchannel_value:{}".format(channel_value))
-        if channel_id:
-            if channel_id.isdigit():
-                # print("int(channel_id): {}".format(int(channel_id)))
-                # now please set the value of the given channel to new value..
-                if int(channel_value) > 255:
-                    channel_value = 255
-                if int(channel_value) < 0:
-                    channel_value = 0
-                self.channels[int(channel_id)] = int(channel_value)
-                # send new values
-                self.ola_connection.dmx_send_frame()
-                return self.channels[int(channel_id)]
-            else:
-                return -1
+        # print("handle_channel_set:")
+        # print("\tchannel_id:{}".format(channel_id))
+        # print("\tchannel_value:{}".format(channel_value))
+        if channel_id is not None:
+            # try:
+            print("int(channel_id): {}".format(int(channel_id)))
+            # now please set the value of the given channel to new value..
+            if int(channel_id) > 512:
+                channel_id = 512
+            if int(channel_id) < 0:
+                channel_id = 0
+            if int(channel_value) > 255:
+                channel_value = 255
+            if int(channel_value) < 0:
+                channel_value = 0
+            self.channels[int(channel_id)] = int(channel_value)
+            # send new values
+            self.ola_connection.dmx_send_frame()
+            return self.channels[int(channel_id)]
+            # except:
+            #     return -1
         else:
             # return error
             return -1
@@ -137,37 +141,35 @@ class OLAThread(threading.Thread):
         # self.channels = []
 
         # init byte array
+        # index 0 is not used.
+        # self.channels.append(255)
+        # for channel_index in range(1, self.channel_count+1):
         for channel_index in range(0, self.channel_count):
             # print(channel_index)
-            temp_value = 0
-            if channel_index > 255:
-                temp_value = channel_index - 256
-            elif channel_index > (2*255):
-                temp_value = channel_index - (2*256)
-            else:
-                temp_value = channel_index
+            # temp_value = (channel_index-1) % 256
+            temp_value = (channel_index) % 256
             # print("{}:{}".format(channel_index, temp_value))
             self.channels.append(temp_value)
 
-        # print(self.channels)
+        print(self.channels)
 
     def dmx_send_frame(self):
         """send data as one dmx frame."""
         if self.flag_connected:
             try:
                 temp_array = array.array('B')
-                for channel_index in range(1, self.channel_count+1):
-                    temp_array.append(self.channels[channel_index-1])
+                for channel_index in range(0, self.channel_count):
+                    temp_array.append(self.channels[channel_index])
 
-                print("temp_array:{}".format(temp_array))
-                print("send frame..")
+                # print("temp_array:{}".format(temp_array))
+                # print("send frame..")
                 self.wrapper.Client().SendDmx(
                     self.universe,
                     # self.channels,
                     temp_array,
                     self.dmx_send_callback
                 )
-                print("done.")
+                # print("done.")
             except OLADNotRunningException:
                 self.wrapper.Stop()
                 print("olad not running anymore.")

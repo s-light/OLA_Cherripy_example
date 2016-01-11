@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html ng-app="mainApp" ng-strict-di>
+<head>
+    <title>OLA+Cherrypy Example</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel="shortcut icon" href="favicon.ico" />
+	<link rel="shortcut icon" type="image/x-icon" href="img/logo/logo.ico" />
+	<link rel="shortcut icon" type="image/png" href="img/logo/logo_500x500.png" />
+	<link rel="shortcut icon" type="image/svg" href="img/logo/logo.svg" />
+
+    <!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+
+    <!-- mobile specific -->
+    <meta
+        name="viewport"
+        content="
+            width=device-width,
+            initial-scale=1.0,
+            minimum-scale=1.0,
+            maximum-scale=1.0,
+            user-scalable=no
+        "
+     />
+
+	<!-- **********
+		IPAD specific metas:
+		https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariHTMLRef/Articles/MetaTags.html
+	-->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="format-detection" content="telephone=no">
+	<!-- ********** -->
+
+
+    <style>
+        body {
+            /* flex boxes :
+        		https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes#Basic_flex_example
+        		http://the-echoplex.net/flexyboxes/
+        	*/
+
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+        	/* for safari: */
+        	display: 						-webkit-flex;
+            -webkit-flex-direction: 		row;
+        	-webkit-flex-wrap:				nowrap;
+        	-webkit-justify-content:		center;
+        	-webkit-align-content:			center;
+        	-webkit-align-items:			stretch;
+        	/* for all others ;-) */
+        	display:				flex;
+        	flex-direction:			row;
+        	flex-wrap:				nowrap;
+        	justify-content:		center;
+        	align-content:			center;
+        	align-items:			stretch;
+
+
+            background-color: rgb(255, 240, 200);
+        }
+
+        .app {
+            display: block;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+        	/* for safari: */
+        	display: 						-webkit-flex;
+            -webkit-flex-direction: 		row;
+        	-webkit-flex-wrap:				nowrap;
+        	-webkit-justify-content:		center;
+        	-webkit-align-content:			center;
+        	-webkit-align-items:			stretch;
+        	/* for all others ;-) */
+        	display:				flex;
+        	flex-direction:			row;
+        	flex-wrap:				nowrap;
+        	justify-content:		center;
+        	align-content:			center;
+        	align-items:			stretch;
+        }
+
+        .box {
+        	display:				block;
+        	position: 				relative;
+
+        	/* for safari: */
+        	-webkit-order:					0;
+        	-webkit-flex: 					0 1 auto;
+        	-webkit-align-self: 			auto;
+        	/* for all others ;-) */
+        	order:					0;
+        	flex: 					0 1 auto;
+        	align-self: 			auto;
+
+        	margin:					0.5em 0.1em;
+        	padding:				1em;
+
+        	background-color:		rgb(0, 0, 0);
+        	background-color:		rgba(0, 0, 0, 0.02);
+        	box-shadow:				0 0 10px rgba(0,0,0,0.2) inset;
+
+        	border-radius:			1em;
+
+        	text-align:				left;
+        }
+
+        input, button {
+            display: block;
+            margin: auto;
+        }
+
+
+    </style>
+
+    <script type="text/javascript" charset="UTF-8">
+
+        var myRequest;
+
+
+        function channel_value_request_result(argument) {
+            if (myRequest.readyState === XMLHttpRequest.DONE) {
+                // console.log("channel_value_request_result - request done!");
+                if (myRequest.status === 200) {
+                    var res_text = myRequest.responseText;
+                    // console.log("res_text", res_text);
+                    var res_json = JSON.parse(res_text);
+                    // console.log("res_json", res_json);
+                } else {
+                    console.log("channel_value_request_result error!!");
+                }
+            }
+        }
+
+        function channel_value_changed(event) {
+            // console.log("dmx value changed..");
+            // console.log("event", event);
+            // this is the event source element
+            // console.log("this", this);
+            // console.log("this.id", this.id);
+
+            // get current values
+            var channel_id_element = document.getElementById("channel_id");
+            var channel_value_numeric_element = document.getElementById("channel_value_numeric");
+            var channel_value_slider_element = document.getElementById("channel_value_slider");
+
+            // console.log("channel_id_element", channel_id_element);
+            // console.log("channel_value_numeric_element", channel_value_numeric_element);
+            // console.log("channel_value_slider_element", channel_value_slider_element);
+
+            var current_element_id = this.id;
+            // console.log("current_element_id", current_element_id);
+
+            // update other input element:
+            if (current_element_id == 'channel_value_slider') {
+                // console.log("update source is slider");
+                channel_value_numeric_element.value = this.value;
+            } else {
+                // console.log("else");
+                if (current_element_id == 'channel_value_numeric') {
+                    // console.log("update source is numeric");
+                    channel_value_slider_element.value = this.value;
+                }
+            }
+
+            // console.log(
+            //     "channel_value_numeric_element.value",
+            //     channel_value_numeric_element.value
+            // );
+            // console.log(
+            //     "channel_value_slider_element.value",
+            //     channel_value_slider_element.value
+            // );
+
+            // create request data
+            var data = {
+                channel_id: channel_id_element.value-1,
+                channel_value: channel_value_numeric_element.value,
+            };
+            // console.log("data", JSON.stringify(data));
+
+            myRequest = new XMLHttpRequest();
+            myRequest.onreadystatechange = channel_value_request_result;
+            myRequest.open('PUT', '/api/channel/');
+            myRequest.setRequestHeader('Content-Type', 'application/json');
+            myRequest.send(JSON.stringify(data));
+        }
+
+        function channel_id_request_result(argument) {
+            if (myRequest.readyState === XMLHttpRequest.DONE) {
+                // console.log("channel_value_request_result - request done!");
+                if (myRequest.status === 200) {
+                    var res_text = myRequest.responseText;
+                    // console.log("res_text", res_text);
+                    var res_json = JSON.parse(res_text);
+                    // console.log("res_json", res_json);
+
+                    var channel_value_new = res_json[0];
+
+                    var channel_value_numeric_element = document.getElementById("channel_value_numeric");
+                    var channel_value_slider_element = document.getElementById("channel_value_slider");
+
+                    channel_value_numeric_element.value = channel_value_new;
+                    channel_value_slider_element.value = channel_value_new;
+                } else {
+                    console.log("channel_id_request_result error!!");
+                }
+            }
+        }
+
+        function channel_id_changed(event) {
+            // console.log("channel id changed..");
+
+            // get elements
+            var channel_id_element = document.getElementById("channel_id");
+
+            // create request data
+            var channel_id = channel_id_element.value-1;
+            // console.log("channel_id", channel_id);
+
+            myRequest = new XMLHttpRequest();
+            myRequest.onreadystatechange = channel_id_request_result;
+            myRequest.open('GET', '/api/channel/' + channel_id + '/');
+            myRequest.setRequestHeader('Content-Type', 'application/json');
+            myRequest.send();
+
+        }
+
+        function initSystem() {
+            console.group("init system...")
+
+            console.log("add event handler to slider.")
+            document.getElementById("channel_value_slider").onchange = channel_value_changed;
+
+            console.log("add event handler to numeric box.")
+            document.getElementById("channel_value_numeric").onchange = channel_value_changed;
+
+            console.log("add event handler to channel id.")
+            document.getElementById("channel_id").onchange = channel_id_changed;
+
+            console.groupEnd("done.")
+        }
+
+        window.onload = initSystem;
+    </script>
+
+</head>
+<body
+    class="blueocean"
+>
+    <div class="app" >
+        <div class="box" >
+            <label class="">
+                <span class="label">channel id</span>
+                <input
+                    id="channel_id"
+                    type="number"
+                    inputmode="numeric"
+                    title="value"
+                    min="1"
+                    max="512"
+                    step="1"
+                    value="1"
+                >
+            </label>
+            <label class="">
+                <span class="label">value</span>
+                <input
+                    id="channel_value_numeric"
+                    type="number"
+                    inputmode="numeric"
+                    title="value"
+                    min="0"
+                    max="255"
+                    step="1"
+                    value="0"
+                >
+                <input
+                    id="channel_value_slider"
+                    type="range"
+                    class="vertical"
+                    orient="vertical"
+                    title="value"
+                    min="0"
+                    max="255"
+                    step="1"
+                    value="0"
+                >
+            </label>
+            <button
+                class="button small inline"
+                title="test something"
+            >
+                channel set
+            </button>
+        </div>
+    </div>
+</body>
+</html>

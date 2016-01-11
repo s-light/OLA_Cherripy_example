@@ -34,7 +34,7 @@ from ola_plugin import OLAPlugin
 from API import APIHandler
 
 ##########################################
-version = '''27.12.2015 16:16 s-light'''
+version = '''11.01.2016 10:08 s-light'''
 ##########################################
 
 dir_current = os.path.dirname(os.path.abspath(__file__))
@@ -58,6 +58,8 @@ if __name__ == '__main__':
     print(42*'*')
     print('Python Version: {}'.format(sys.version))
     print(42*'*')
+    print('cherrypy version: {}'.format(cherrypy.__version__))
+    print(42*'*')
     print('')
     print(__doc__)
     print('')
@@ -79,8 +81,8 @@ if __name__ == '__main__':
             # 'server.socket_host': '::',
             'server.socket_host': '0.0.0.0',
             # 'server.socket_host': '192.168.178.41',
-            # 'server.socket_port': 8080,
-            'server.socket_port': 80,
+            'server.socket_port': 8080,
+            # 'server.socket_port': 80,
             'server.environment': 'development',
             # 'server.environment': 'production',
             'server.thread_pool': 20,

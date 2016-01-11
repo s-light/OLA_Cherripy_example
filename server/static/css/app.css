@@ -1,0 +1,266 @@
+@charset "utf-8";
+
+/*********************************************************/
+/**  app                                                **/
+/*********************************************************/
+
+/***** app *****/
+
+
+/*.app > div {*/
+.app {
+	/* flex boxes :
+		https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes#Basic_flex_example
+		http://the-echoplex.net/flexyboxes/
+	*/
+
+	/* for safari: */
+	display: 						-webkit-flex;
+    -webkit-flex-direction: 		row;
+	-webkit-flex-wrap:				nowrap;
+	-webkit-justify-content:		flex-start;
+	-webkit-align-content:			center;
+	-webkit-align-items:			stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			row;
+	flex-wrap:				nowrap;
+	justify-content:		flex-start;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+.app > sl-tabbed-content {
+	margin: 1em auto;
+}
+
+.group {
+	display:				block;
+	position: 				relative;
+
+	/* for safari: */
+	-webkit-order:					0;
+	-webkit-flex: 					0 1 auto;
+	-webkit-align-self: 			auto;
+	/* for all others ;-) */
+	order:					0;
+	flex: 					0 1 auto;
+	align-self: 			auto;
+
+	margin:					0.5em 0.1em;
+	padding:				0.5em;
+
+	background-color:		rgb(0, 0, 0);
+	background-color:		rgba(0, 0, 0, 0.02);
+	box-shadow:				0 0 10px rgba(0,0,0,0.2) inset;
+
+	border-radius:			1em;
+
+	text-align:				left;
+}
+
+.fixedRightTop {
+	position:				fixed;
+	top:					0;
+	right:					0;
+}
+
+footer {
+    position:				relative;
+	left:					0;
+	top:					auto;
+	right:					0;
+	bottom:					0;
+	font-size:				0.3em;
+}
+
+/***** Tabbed Content *****/
+
+/* decrease font-size on small screens*/
+@media screen and (max-width: 800px) {
+	sl-tabbed-content {
+		font-size: 				0.5em;
+		line-height:			110%;
+	}
+}
+
+sl-pane > div > .colorSlidersSection {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			1 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					1 1 auto;
+    align-self: 			auto;
+}
+
+.colorSlidersSection {
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: column;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+.colorSlidersSection > * {
+    /* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order: 					0;
+    flex: 					0 1 auto;
+    align-self: 			auto;
+}
+
+.colorSlidersSection > .colorSlidersGroup {
+	-webkit-flex: 			1 1 auto;
+    flex: 					1 1 auto;
+}
+
+/*RGB slider*/
+.colorSlidersGroup {
+	position: 				relative;
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: row;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	stretch;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			row;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			stretch;
+}
+
+.colorSlidersGroup > label {
+	/* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order:					0;
+	flex: 					0 1 auto;
+	align-self: 			auto;
+
+	margin:					0.1em;
+}
+
+.colorGroup {
+	position: 				relative;
+	/* for safari: */
+	display: 				-webkit-flex;
+    -webkit-flex-direction: column;
+	-webkit-flex-wrap:		nowrap;
+	-webkit-justify-content:center;
+	-webkit-align-content:	center;
+	-webkit-align-items:	center;
+	/* for all others ;-) */
+	display:				flex;
+	flex-direction:			column;
+	flex-wrap:				nowrap;
+	justify-content:		center;
+	align-content:			center;
+	align-items:			center;
+}
+
+.colorGroup > * {
+	/* for safari: */
+	-webkit-order:			0;
+	-webkit-flex: 			0 1 auto;
+	-webkit-align-self: 	auto;
+	/* for all others ;-) */
+	order:					0;
+	flex: 					0 1 auto;
+	align-self: 			auto;
+
+	margin:					0.1em;
+}
+
+.colorGroup > input[type="number"],
+.colorGroup > input[type="range"] {
+	width: 					3em;
+}
+
+.colorGroup > input[type="range"] {
+	-webkit-flex: 			1 1 auto;
+	flex: 					1 1 auto;
+
+	min-height:				5em;
+	/*height: 				12em;*/
+	height: 				100%;
+
+}
+
+/***** general *****/
+
+.clickable {
+	cursor:					pointer;
+}
+
+/***** others *****/
+/* .group.option input [type='number'] {
+	width: 6em;
+} */
+
+.group.option.small{
+	font-size:				0.85em;
+}
+
+.group.option.small th {
+    padding: 0 0.1em;
+}
+
+.output, .info {
+	clear:					both;
+}
+
+.text-small {
+	/*overflow:				auto;*/
+	/*overflow-x:				hidden;/**/
+	font-size:				0.8em;
+	line-height:			1em;
+}
+
+
+.colorpreview {
+	display:				block;
+	clear:					both;
+	/*position:				absolute;
+	top:					0;
+	right:					0;
+	bottom:					0;
+	left:					0;*/
+	margin:					0.1em;
+	width:					100%;
+	height:					2em;
+	border-radius:			1em;
+}
+
+
+
+
+
+/***** form validation *****/
+.ng-invalid {
+	border:					1px solid rgb(255, 50, 0);
+	box-shadow:				0 0 2em rgb(255, 50, 0) inset;
+}
+
+.error {
+	color:					rgb(255, 50, 0);
+}
