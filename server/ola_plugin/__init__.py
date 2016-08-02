@@ -26,7 +26,6 @@ version = '''27.12.2015 16:16 s-light'''
 
 
 class OLAPlugin(plugins.SimplePlugin):
-
     """creates a bridge between cherrypy and ola."""
 
     def __init__(self, bus, myname):

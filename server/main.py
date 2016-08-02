@@ -41,7 +41,6 @@ dir_current = os.path.dirname(os.path.abspath(__file__))
 
 
 class StaticFiles(object):
-
     """only here to have a class..."""
 
     pass
